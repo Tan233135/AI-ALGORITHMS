@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 #The "matplotlib" is used for graph visualization
 
 #The uniform cost function
-def uniform_cost_function(graph,start,goal):
+def uniform_cost_search(graph,start,goal):
     priority_queue=[(0,start)]
     visited = {start:(0,None)} #dictionary to store the cost of the shortest path to each node
     while priority_queue:
@@ -40,7 +40,7 @@ def reconstruct_path(visited,start,goal):
     path.reverse()
     return path
 
-def visualization_graph(graph,path=None):
+def visualize_graph(graph,path=None):
     G=nx.DiGraph()
     for node,edges in graph.items():
         for neighbor,cost in edges:
@@ -56,3 +56,21 @@ def visualization_graph(graph,path=None):
     plt.title("Uniform Cost Search Path Visualization")
     plt.show()
 
+graph={
+    'A':[('B',1),('C',4)],
+    'B':[('D',1),('E',3)],
+    'C':[('F',5)],
+    'D':[('G',2)],
+    'E':[('G',1)],
+    'F':[('G',2)],
+    'G':[]
+}
+start_node='A'
+goal_node='G'
+result = uniform_cost_search(graph,start_node,goal_node)
+if result:
+    total_cost,path=result
+    print(f"Least cost path from {start_node} to {goal_node}: {' -> '.join(path)} with total cost {total_cost}")
+    visualize_graph(graph,path)
+else:
+    print(f"No path found from {start_node} to {goal_node}")
