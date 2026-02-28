@@ -66,7 +66,7 @@ graph={
     'G':[]
 }
 start_node='A'
-goal_node='G'
+goal_node='E'
 result = uniform_cost_search(graph,start_node,goal_node)
 if result:
     total_cost,path=result
