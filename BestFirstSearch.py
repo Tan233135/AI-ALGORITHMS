@@ -35,18 +35,18 @@ def BestFirstSearch():
 	while (len(OPEN) != 0) and (State != SUCCESS):
 		print("------------")
 		N= OPEN[0]
-		print("N=",N)
+		print("N = ",N)
 		del OPEN[0] #delete the node we picked
 		
 		if GOALTEST(N[0])==True:
 			State = SUCCESS
 			CLOSED = APPEND(CLOSED,[N])
-			print("CLOSED=",CLOSED)
+			print("CLOSED = ",CLOSED)
 		else:
 			CLOSED = APPEND(CLOSED,[N])
-			print("CLOSED=",CLOSED)
+			print("CLOSED = ",CLOSED)
 			CHILD = MOVEGEN(N[0])
-			print("CHILD=",CHILD)
+			print("CHILD = ",CHILD)
 			for val in CLOSED:
 				if val in CHILD:
 					CHILD.remove(val)
@@ -54,9 +54,9 @@ def BestFirstSearch():
 				if val in CHILD:
 					CHILD.remove(val)
 			OPEN = APPEND(CHILD,OPEN) #append movegen elements to OPEN
-			print("Unsorted OPEN=",OPEN)
+			print("Unsorted OPEN = ",OPEN)
 			SORT(OPEN)
-			print("Sorted OPEN=",OPEN)
+			print("Sorted OPEN = ",OPEN)
 			
 	Closed=CLOSED
 	return State
