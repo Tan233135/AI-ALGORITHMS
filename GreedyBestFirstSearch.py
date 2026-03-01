@@ -70,4 +70,13 @@ Every node has a value assigned to it. These values indicates the probable dista
 from that node. 
 The algorithm works by taking a closed and opened list. The opened node initially has the start node. Then it
 search for its child nodes. Then the start node shifts to the closed node. The child nodes are now appended
-in the opened list. Then the nodes are sorted in assending order '''
+in the opened list. Then the nodes are sorted in assending order. The node with the least huristic value is choosen.
+Then that node is tested, if that is the goal node. If that is not the goal node. Then, that node is shifted to the
+closed list with a reference of its parent node. This kind of storing method gives the opportunity to find the final path
+to reach the goal node. Then this process is caried on till the detecion of the goal node.
+
+LIMITATIONS OF GBFS: 
+The GBFS can't find the total minimized path. As it only takes the nodes only huristic values h(n)
+and ignores the actual path cose g(n).
+
+So, GBFS is not guranteed to find the shortest path.'''
