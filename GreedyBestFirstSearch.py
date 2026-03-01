@@ -64,3 +64,10 @@ def BestFirstSearch():
 #Driver Code
 result=BestFirstSearch() #call search algorithm
 print(Closed,result)
+
+'''The GreedyBFS works with huristic value. Thats why its also known as the huristic algorithm in AI.
+Every node has a value assigned to it. These values indicates the probable distance to reach the goal node 
+from that node. 
+The algorithm works by taking a closed and opened list. The opened node initially has the start node. Then it
+search for its child nodes. Then the start node shifts to the closed node. The child nodes are now appended
+in the opened list. Then the nodes are sorted in assending order '''
