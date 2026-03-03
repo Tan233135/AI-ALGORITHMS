@@ -28,3 +28,70 @@ Algorithm:
     e) push q on the closed list
     end (while loop)'''
 
+import heapq
+
+
+class Node:
+    def __init__(self, position):
+        self.position = position   # Can be graph node name OR (x, y) tuple
+        self.g = float('inf')
+        self.h = 0
+        self.f = float('inf')
+        self.parent = None
+
+    def __lt__(self, other):
+        return self.f < other.f
+
+
+def a_star(start, goal, get_neighbors, heuristic):
+    
+    nodes = {}
+    
+    def get_node(pos):
+        if pos not in nodes:
+            nodes[pos] = Node(pos)
+        return nodes[pos]
+
+    open_list = []
+    closed_set = set()
+
+    start_node = get_node(start)
+    start_node.g = 0
+    start_node.h = heuristic(start, goal)
+    start_node.f = start_node.g + start_node.h
+
+    heapq.heappush(open_list, start_node)
+
+    while open_list:
+        current = heapq.heappop(open_list)
+
+        if current.position == goal:
+            return reconstruct_path(current)
+
+        closed_set.add(current.position)
+
+        for neighbor_pos, cost in get_neighbors(current.position):
+
+            if neighbor_pos in closed_set:
+                continue
+
+            neighbor = get_node(neighbor_pos)
+            tentative_g = current.g + cost
+
+            if tentative_g < neighbor.g:
+                neighbor.parent = current
+                neighbor.g = tentative_g
+                neighbor.h = heuristic(neighbor_pos, goal)
+                neighbor.f = neighbor.g + neighbor.h
+
+                heapq.heappush(open_list, neighbor)
+
+    return None
+
+
+def reconstruct_path(node):
+    path = []
+    while node:
+        path.append(node.position)
+        node = node.parent
+    return path[::-1]
