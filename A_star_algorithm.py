@@ -55,3 +55,19 @@ def calculate_h_value(row,col,dest):
     return ((row-dest[0]) ** 2 + (col - dest[1]) ** 2) ** 0.5
 
 def trace_path(cell_details,dest):
+    print("The Path is ")
+    path = []
+    row = dest[0]
+    col = dest[1]
+    while not (cell_details[row][col].parent_i == row and cell_details[row][col].parent_j == col):
+        path.append((row,col))
+        temp_row =  cell_details[row][col].parent_i
+        temp_col = cell_details[row][col].parent_j
+        row = temp_row
+        col = temp_col
+    path.append((row,col))
+    path.reverse()
+    for i in path:
+        print(" -> ",i,end=" ")
+    print()
+    
