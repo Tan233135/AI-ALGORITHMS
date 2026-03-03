@@ -35,7 +35,7 @@ class cell:
     def __init__(self):
         self.parent_i = 0 #parent cell's row index
         self.parent_j = 0 #parent cell's column index
-        self.f = float('inf') #total cost of the cell = g+h
+        self.f = float('inf') #total cost of the cell = g + h
         self.g = float('inf') #cost from start to this cell
         self.h = 0 #Heuristic cost from this cell to destination
 
@@ -70,4 +70,3 @@ def trace_path(cell_details,dest):
     for i in path:
         print(" -> ",i,end=" ")
     print()
-    
