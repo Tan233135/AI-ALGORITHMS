@@ -27,3 +27,31 @@ Algorithm:
     end (for loop)
     e) push q on the closed list
     end (while loop)'''
+
+import math
+import heapq
+
+class cell:
+    def __init__(self):
+        self.parent_i = 0 #parent cell's row index
+        self.parent_j = 0 #parent cell's column index
+        self.f = float('inf') #total cost of the cell = g+h
+        self.g = float('inf') #cost from start to this cell
+        self.h = 0 #Heuristic cost from this cell to destination
+
+ROW = 9
+COL = 10
+
+def is_valid(row,col):
+    return (row>=0) and (row<ROW) and (col>=0) and (col<COL)
+
+def is_unblocked(grid,row,col):
+    return grid[row][col] ==1
+
+def is_destination(row,col,dest):
+    return row == dest[0] and col == dest[1]
+
+def calculate_h_value(row,col,dest):
+    return ((row-dest[0]) ** 2 + (col - dest[1]) ** 2) ** 0.5
+
+def trace_path(cell_details,dest):
