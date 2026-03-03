@@ -30,68 +30,72 @@ Algorithm:
 
 import heapq
 
-
-class Node:
-    def __init__(self, position):
-        self.position = position   # Can be graph node name OR (x, y) tuple
-        self.g = float('inf')
-        self.h = 0
-        self.f = float('inf')
-        self.parent = None
-
-    def __lt__(self, other):
-        return self.f < other.f
-
-
-def a_star(start, goal, get_neighbors, heuristic):
+def a_star(graph, start, goal, heuristic):
+    """
+    A* algorithm for graphs
     
-    nodes = {}
+    Args:
+        graph: dict {node: [(neighbor, cost), ...]}
+        heuristic: dict {node: estimated_cost_to_goal}
+        start: start node
+        goal: goal node
     
-    def get_node(pos):
-        if pos not in nodes:
-            nodes[pos] = Node(pos)
-        return nodes[pos]
-
-    open_list = []
+    Returns:
+        tuple (path, cost) or (None, inf) if no path
+    """
+    # Priority queue: (f_score, g_score, node, path)
+    open_set = [(heuristic[start], 0, start, [start])]
     closed_set = set()
-
-    start_node = get_node(start)
-    start_node.g = 0
-    start_node.h = heuristic(start, goal)
-    start_node.f = start_node.g + start_node.h
-
-    heapq.heappush(open_list, start_node)
-
-    while open_list:
-        current = heapq.heappop(open_list)
-
-        if current.position == goal:
-            return reconstruct_path(current)
-
-        closed_set.add(current.position)
-
-        for neighbor_pos, cost in get_neighbors(current.position):
-
-            if neighbor_pos in closed_set:
+    g_scores = {start: 0}
+    
+    while open_set:
+        f, g, current, path = heapq.heappop(open_set)
+        
+        if current == goal:
+            return path, g
+        
+        if current in closed_set:
+            continue
+            
+        closed_set.add(current)
+        
+        for neighbor, cost in graph.get(current, []):
+            if neighbor in closed_set:
                 continue
-
-            neighbor = get_node(neighbor_pos)
-            tentative_g = current.g + cost
-
-            if tentative_g < neighbor.g:
-                neighbor.parent = current
-                neighbor.g = tentative_g
-                neighbor.h = heuristic(neighbor_pos, goal)
-                neighbor.f = neighbor.g + neighbor.h
-
-                heapq.heappush(open_list, neighbor)
-
-    return None
+                
+            new_g = g + cost
+            
+            if neighbor not in g_scores or new_g < g_scores[neighbor]:
+                g_scores[neighbor] = new_g
+                new_f = new_g + heuristic.get(neighbor, float('inf'))
+                heapq.heappush(open_set, (new_f, new_g, neighbor, path + [neighbor]))
+    
+    return None, float('inf')
 
 
-def reconstruct_path(node):
-    path = []
-    while node:
-        path.append(node.position)
-        node = node.parent
-    return path[::-1]
+# Example usage
+if __name__ == "__main__":
+    # Graph: adjacency list with costs
+    graph = {
+        'A': [('B', 2), ('C', 3)],
+        'B': [('D', 3), ('E', 4)],
+        'C': [('E', 2), ('F', 3)],
+        'D': [('G', 4)],
+        'E': [('G', 3)],
+        'F': [('G', 5)],
+        'G': []
+    }
+    
+    # Heuristic: estimated distance to goal 'G'
+    heuristic = {
+        'A': 6, 'B': 4, 'C': 4, 
+        'D': 3.5, 'E': 1, 'F': 1, 'G': 0
+    }
+    
+    path, cost = a_star(graph, 'A', 'G', heuristic)
+    
+    if path:
+        print(f"Path: {' -> '.join(path)}")
+        print(f"Cost: {cost}")
+    else:
+        print("No path found")
