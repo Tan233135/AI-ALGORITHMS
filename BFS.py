@@ -26,4 +26,4 @@ graph = {
     'F': []
 }
 
-bfs(graph, 'A')
+bfs(graph, 'B')
